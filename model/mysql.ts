@@ -1,5 +1,3 @@
-import { Knex } from 'knex'
-
 export const knex = require('knex')({
   client: 'mysql',
   connection: {
