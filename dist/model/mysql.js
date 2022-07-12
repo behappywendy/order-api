@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.knex = void 0;
 exports.knex = require('knex')({
-    client: 'mysql2',
+    client: 'mysql',
     connection: {
         host: 'localhost',
         port: 3306,
