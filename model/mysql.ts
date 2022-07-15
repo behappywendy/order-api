@@ -12,13 +12,13 @@ export const knex = require('knex')({
 
 declare module 'knex/types/tables' {
   interface Product {
-    product_id: number
-    create_time: string
-    update_time: string
-    product_name: string
-    product_price: number
-    product_sales: number
-    product_stock: number
+    productId: number
+    createTime: string
+    updateTime: string
+    productName: string
+    productPrice: number
+    productSales: number
+    productStock: number
     note: string
   }
 

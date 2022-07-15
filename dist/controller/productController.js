@@ -20,12 +20,12 @@ const createProduct = (req, res) => {
     const nowTime = moment_timezone_1.default.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss');
     (0, mysql_1.knex)('product')
         .insert({
-        create_time: nowTime,
-        update_time: nowTime,
-        product_name: productName,
-        product_price: productPrice,
-        product_sales: productSales,
-        product_stock: productStock,
+        createTime: nowTime,
+        updateTime: nowTime,
+        productName,
+        productPrice,
+        productSales,
+        productStock,
         note,
     })
         .then((result) => {
@@ -37,8 +37,10 @@ const readProduct = (req, res) => {
     const { id } = req.params;
     (0, mysql_1.knex)('product')
         .select('*')
-        .where('product_id', id)
+        .where('productId', id)
         .then((result) => {
+        result[0].createTime = (0, moment_timezone_1.default)(result[0].createTime).format('YYYY-MM-DD HH:mm:ss');
+        result[0].updateTime = (0, moment_timezone_1.default)(result[0].updateTime).format('YYYY-MM-DD HH:mm:ss');
         res.send(result);
     });
 };
@@ -47,28 +49,37 @@ const readProducts = (req, res) => {
     (0, mysql_1.knex)('product')
         .select('*')
         .then((result) => {
+        result.forEach((element) => {
+            element.createTime = (0, moment_timezone_1.default)(element.createTime).format('YYYY-MM-DD HH:mm:ss');
+            element.updateTime = (0, moment_timezone_1.default)(element.updateTime).format('YYYY-MM-DD HH:mm:ss');
+        });
         res.send(result);
     });
 };
 exports.readProducts = readProducts;
 const updateProduct = (req, res) => {
-    const { id } = req.params;
+    const id = parseInt(req.params.id);
     const { productName, productPrice, productSales, productStock, note } = req.body;
     const nowTime = moment_timezone_1.default.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss');
-    (0, mysql_1.knex)('product').where('product_id', id).update({
-        update_time: nowTime,
-        product_name: productName,
-        product_price: productPrice,
-        product_sales: productSales,
-        product_stock: productStock,
+    (0, mysql_1.knex)('product')
+        .where('productId', id)
+        .update({
+        updateTime: nowTime,
+        productName,
+        productPrice,
+        productSales,
+        productStock,
         note,
-    });
-    res.send('update success');
+    })
+        .then((result) => res.status(!!result ? 200 : 404).json({ success: !!result }))
+        .catch((error) => res.status(500).json(error));
+    // res.send('update success')
+    // res.send({ id, ...req.body })
 };
 exports.updateProduct = updateProduct;
 const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    yield (0, mysql_1.knex)('product').where('product_id', id).del();
+    yield (0, mysql_1.knex)('product').where('productId', id).del();
     res.send('delete success');
 });
 exports.deleteProduct = deleteProduct;
