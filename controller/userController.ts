@@ -2,16 +2,18 @@ import { Request, Response } from 'express'
 import { knex } from '../model/mysql'
 import moment from 'moment-timezone'
 import { Users } from 'knex/types/tables'
+import { SHA256 } from 'crypto-js'
 
 export const createUser = (req: Request, res: Response) => {
   const { userName, userPassword, adminPermission } = req.body
   const nowTime = moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss')
+  const cryptPassword = SHA256(userPassword).toString()
   knex('users')
     .insert({
       createTime: nowTime,
       updateTime: nowTime,
       userName,
-      userPassword,
+      userPassword: cryptPassword,
       adminPermission,
     })
     .then((result: any) => {
