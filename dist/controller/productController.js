@@ -73,13 +73,14 @@ const updateProduct = (req, res) => {
     })
         .then((result) => res.status(!!result ? 200 : 404).json({ success: !!result }))
         .catch((error) => res.status(500).json(error));
-    // res.send('update success')
-    // res.send({ id, ...req.body })
 };
 exports.updateProduct = updateProduct;
 const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    yield (0, mysql_1.knex)('product').where('productId', id).del();
-    res.send('delete success');
+    yield (0, mysql_1.knex)('product')
+        .where('productId', id)
+        .del()
+        .then((result) => res.status(!!result ? 200 : 404).json({ success: !!result }))
+        .catch((error) => res.status(500).json(error));
 });
 exports.deleteProduct = deleteProduct;

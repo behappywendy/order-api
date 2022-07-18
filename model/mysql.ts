@@ -22,7 +22,17 @@ declare module 'knex/types/tables' {
     note: string
   }
 
+  interface Users {
+    userId: number
+    createTime: string
+    updateTime: string
+    userName: string
+    userPassword: string
+    adminPermission: number
+  }
+
   interface Tables {
     product: Product
+    users: Users
   }
 }

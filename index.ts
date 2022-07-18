@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express'
 import cors from 'cors'
 import productRouter from './router/productRouter'
+import userRouter from './router/userRouter'
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -16,6 +17,7 @@ app.use(
   })
 )
 app.use('/product', productRouter)
+app.use('/user', userRouter)
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`)

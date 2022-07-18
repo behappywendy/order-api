@@ -1,33 +1,30 @@
 import { Request, Response } from 'express'
 import { knex } from '../model/mysql'
 import moment from 'moment-timezone'
-import { Product } from 'knex/types/tables'
+import { Users } from 'knex/types/tables'
 
-export const createProduct = (req: Request, res: Response) => {
-  const { productName, productPrice, productSales, productStock, note } =
-    req.body
+export const createUser = (req: Request, res: Response) => {
+  const { userName, userPassword, adminPermission } = req.body
   const nowTime = moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss')
-  knex('product')
+  knex('users')
     .insert({
       createTime: nowTime,
       updateTime: nowTime,
-      productName,
-      productPrice,
-      productSales,
-      productStock,
-      note,
+      userName,
+      userPassword,
+      adminPermission,
     })
     .then((result: any) => {
       res.send(result)
     })
 }
 
-export const readProduct = (req: Request, res: Response) => {
+export const readUser = (req: Request, res: Response) => {
   const { id } = req.params
-  knex('product')
+  knex('users')
     .select('*')
-    .where('productId', id)
-    .then((result: Product[]) => {
+    .where('userId', id)
+    .then((result: Users[]) => {
       result[0].createTime = moment(result[0].createTime).format(
         'YYYY-MM-DD HH:mm:ss'
       )
@@ -38,10 +35,10 @@ export const readProduct = (req: Request, res: Response) => {
     })
 }
 
-export const readProducts = (req: Request, res: Response) => {
-  knex('product')
+export const readUsers = (req: Request, res: Response) => {
+  knex('users')
     .select('*')
-    .then((result: Product[]) => {
+    .then((result: Users[]) => {
       result.forEach((element) => {
         element.createTime = moment(element.createTime).format(
           'YYYY-MM-DD HH:mm:ss'
@@ -54,20 +51,17 @@ export const readProducts = (req: Request, res: Response) => {
     })
 }
 
-export const updateProduct = (req: Request, res: Response) => {
+export const updateUser = (req: Request, res: Response) => {
   const id = parseInt(req.params.id)
-  const { productName, productPrice, productSales, productStock, note } =
-    req.body
+  const { userName, userPassword, adminPermission } = req.body
   const nowTime = moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss')
-  knex('product')
-    .where('productId', id)
+  knex('users')
+    .where('userId', id)
     .update({
       updateTime: nowTime,
-      productName,
-      productPrice,
-      productSales,
-      productStock,
-      note,
+      userName,
+      userPassword,
+      adminPermission,
     })
     .then((result: any) =>
       res.status(!!result ? 200 : 404).json({ success: !!result })
@@ -75,10 +69,10 @@ export const updateProduct = (req: Request, res: Response) => {
     .catch((error: any) => res.status(500).json(error))
 }
 
-export const deleteProduct = async (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params
-  await knex('product')
-    .where('productId', id)
+  await knex('users')
+    .where('userId', id)
     .del()
     .then((result: any) =>
       res.status(!!result ? 200 : 404).json({ success: !!result })
