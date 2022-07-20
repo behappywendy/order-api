@@ -1,6 +1,7 @@
 import express, { Router } from 'express'
 import {
   createUser,
+  userLogin,
   readUser,
   readUsers,
   updateUser,
@@ -9,6 +10,8 @@ import {
 const router: Router = express.Router()
 
 router.post('/', express.json(), createUser)
+
+router.post('/login', express.json(), userLogin)
 
 router.get('/:id', readUser)
 router.get('/', readUsers)

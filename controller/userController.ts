@@ -3,22 +3,71 @@ import { knex } from '../model/mysql'
 import moment from 'moment-timezone'
 import { Users } from 'knex/types/tables'
 import { SHA256 } from 'crypto-js'
+import jwt from 'jsonwebtoken'
 
-export const createUser = (req: Request, res: Response) => {
+const SECRET = 'Hello_Order_Form'
+
+export const createUser = async (req: Request, res: Response) => {
   const { userName, userPassword, adminPermission } = req.body
   const nowTime = moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss')
   const cryptPassword = SHA256(userPassword).toString()
+
+  const userExist = await knex('users').select().where('userName', userName)
+
+  if (userExist.length)
+    res.status(401).json({
+      message: '使用者名稱已存在',
+    })
+  else {
+    knex('users')
+      .insert({
+        createTime: nowTime,
+        updateTime: nowTime,
+        userName,
+        userPassword: cryptPassword,
+        adminPermission,
+      })
+      .then((result: any) => {
+        res.send(result)
+      })
+  }
+}
+
+export const userLogin = (req: Request, res: Response) => {
+  const { userName, userPassword } = req.body
   knex('users')
-    .insert({
-      createTime: nowTime,
-      updateTime: nowTime,
-      userName,
-      userPassword: cryptPassword,
-      adminPermission,
+    .select('*')
+    .where('userName', userName)
+    .then((result: Users[]) => {
+      if (!result.length)
+        res.status(401).json({
+          message: '使用者名稱或密碼錯誤',
+        })
+      else {
+        if (
+          result[0].userPassword &&
+          result[0].userPassword! !== SHA256(userPassword).toString()
+        )
+          res.status(401).json({
+            message: '使用者名稱或密碼錯誤',
+          })
+        else {
+          const token = jwt.sign(
+            {
+              id: result[0].userId,
+              userName: result[0].userName,
+            },
+            SECRET,
+            { expiresIn: '1 day' }
+          )
+          res.send({
+            adminPermission: result[0].adminPermission,
+            token,
+          })
+        }
+      }
     })
-    .then((result: any) => {
-      res.send(result)
-    })
+    .catch((error: any) => res.status(500).json(error))
 }
 
 export const readUser = (req: Request, res: Response) => {
