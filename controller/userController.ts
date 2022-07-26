@@ -1,11 +1,9 @@
+import { signJwt } from './../model/jwt'
 import { Request, Response } from 'express'
 import { knex } from '../model/mysql'
 import moment from 'moment-timezone'
 import { Users } from 'knex/types/tables'
 import { SHA256 } from 'crypto-js'
-import jwt from 'jsonwebtoken'
-
-const SECRET = 'Hello_Order_Form'
 
 export const createUser = async (req: Request, res: Response) => {
   const { userName, userPassword, adminPermission } = req.body
@@ -52,14 +50,11 @@ export const userLogin = (req: Request, res: Response) => {
             message: '使用者名稱或密碼錯誤',
           })
         else {
-          const token = jwt.sign(
-            {
-              id: result[0].userId,
-              userName: result[0].userName,
-            },
-            SECRET,
-            { expiresIn: '1 day' }
-          )
+          const token = signJwt({
+            id: result[0].userId,
+            userName: result[0].userName,
+            adminPermission: result[0].adminPermission,
+          })
           res.send({
             adminPermission: result[0].adminPermission,
             token,
@@ -129,4 +124,9 @@ export const deleteUser = async (req: Request, res: Response) => {
       res.status(!!result ? 200 : 404).json({ success: !!result })
     )
     .catch((error: any) => res.status(500).json(error))
+}
+
+export const verifyUser = (req: Request, res: Response) => {
+  // const { token } = req.body
+  res.send(req.headers.authorization?.split(' '))
 }

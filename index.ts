@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from 'express'
 import cors from 'cors'
 import productRouter from './router/productRouter'
 import userRouter from './router/userRouter'
+import cartRouter from './router/cartRouter'
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -13,11 +14,12 @@ app.get('/', cors(), (req: Request, res: Response) => {
 })
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:8080',
   })
 )
 app.use('/product', productRouter)
 app.use('/user', userRouter)
+app.use('/cart', cartRouter)
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`)
