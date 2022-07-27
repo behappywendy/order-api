@@ -31,8 +31,18 @@ declare module 'knex/types/tables' {
     adminPermission: number
   }
 
+  interface Cart {
+    userId: number
+    productId: number
+    createTime: string
+    updateTime: string
+    amount: number
+    totalPrice: number
+  }
+
   interface Tables {
     product: Product
     users: Users
+    cart: Cart
   }
 }
