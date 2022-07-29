@@ -26,13 +26,15 @@ export async function up(knex: Knex): Promise<void> {
     })
     .createTable('cart', (table) => {
       table
-        .foreign('userId')
-        .references('users.userId')
+        .integer('userId')
+        .references('userId')
+        .inTable('users')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table
-        .foreign('productId')
-        .references('product.productId')
+        .integer('productId')
+        .references('usproductIderId')
+        .inTable('product')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table.datetime('createTime').notNullable().comment('建立時間')
