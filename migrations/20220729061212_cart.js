@@ -5,7 +5,7 @@
 exports.up = async (knex) => {
   const result = await knex.schema
     .createTable('cart', (table) => {
-      // table.integer('userId').notNullable().comment('使用者ID')
+      table.integer('userId').notNullable().comment('使用者ID')
       // table.integer('productId').notNullable().comment('商品ID')
       table.foreign('userId').references('users.userId')
       table.datetime('createTime').notNullable().comment('建立時間')
