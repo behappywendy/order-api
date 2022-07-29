@@ -12,6 +12,7 @@ exports.up = async function (knex) {
     table.tinyint('adminPermission').comment('管理者權限')
   })
   console.log(result)
+  return result
 }
 
 /**
