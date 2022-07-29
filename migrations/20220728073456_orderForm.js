@@ -27,18 +27,8 @@ exports.up = function (knex) {
       table.string('note').comment('備註')
     })
     .createTable('cart', (table) => {
-      table
-        .integer('userId')
-        .references('userId')
-        .inTable('users')
-        .onUpdate('CASCADE')
-        .onDelete('CASCADE')
-      table
-        .integer('productId')
-        .references('usproductIderId')
-        .inTable('product')
-        .onUpdate('CASCADE')
-        .onDelete('CASCADE')
+      table.integer('userId').notNullable().comment('使用者ID')
+      table.integer('productId').notNullable().comment('商品ID')
       table.datetime('createTime').notNullable().comment('建立時間')
       table.datetime('updatetime').notNullable().comment('更新時間')
       table.integer('amount').notNullable().comment('數量')
