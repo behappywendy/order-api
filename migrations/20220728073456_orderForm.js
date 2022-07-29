@@ -26,11 +26,13 @@ exports.up = function (knex) {
     })
     .createTable('cart', (table) => {
       table
+        .integer('userId')
         .foreign('userId')
         .references('users.userId')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table
+        .integer('productId')
         .foreign('productId')
         .references('product.productId')
         .onUpdate('CASCADE')
