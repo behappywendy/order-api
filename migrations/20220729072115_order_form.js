@@ -47,8 +47,6 @@ exports.up = async (knex) => {
       table.integer('amount').notNullable().comment('數量')
       table.datetime('createTime').notNullable().comment('建立時間')
     })
-  // .toSQL()
-  console.log(result)
   return result
 }
 
