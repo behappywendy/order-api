@@ -7,11 +7,9 @@ exports.up = async (knex) => {
     .createTable('order', (table) => {
       table.increments('id').notNullable().primary().comment('Primary Key')
       table.integer('userId').unsigned().notNullable()
-      table
-        .foreign('userId')
-        .references('users.userId')
-        .onUpdate('NO ACTION')
-        .onDelete('NO ACTION')
+      table.foreign('userId').references('users.userId')
+      // .onUpdate('NO ACTION')
+      // .onDelete('NO ACTION')
       table.string('orderId', 36).notNullable().comment('訂單編號')
       // table.integer('productId')
       // table
