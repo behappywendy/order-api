@@ -21,7 +21,6 @@ exports.up = async (knex) => {
       table.string('note').comment('備註')
     })
     .toSQL()
-    .toNative()
   console.log(result)
   return result
 }
