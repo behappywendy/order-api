@@ -2,7 +2,7 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = async function (knex) {
+exports.up = async (knex) => {
   const result = await knex.schema.createTable('users', (table) => {
     table.increments('userId').notNullable().primary().comment('Primary Key')
     table.datetime('createTime').notNullable().comment('建立時間')
@@ -19,6 +19,7 @@ exports.up = async function (knex) {
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = function (knex) {
-  return knex.schema.dropTable('users')
+exports.down = async (knex) => {
+  const result = await knex.schema.dropTable('users')
+  return result
 }
