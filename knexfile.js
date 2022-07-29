@@ -8,7 +8,7 @@ module.exports = {
     client: 'mysql',
     connection: {
       user: 'root',
-      password: 'hello_root',
+      password: 'test',
       database: 'order_form',
     },
   },
