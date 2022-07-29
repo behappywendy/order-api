@@ -1,12 +1,9 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.up = function (knex) {
+import { Knex } from 'knex'
+
+export async function up(knex: Knex): Promise<void> {
   return knex.schema
     .createTable('users', (table) => {
-      table.primary('userId')
-      table.increments('userId').notNullable().comment('Primary Key')
+      table.increments('userId').notNullable().primary().comment('Primary Key')
       table.datetime('createTime').notNullable().comment('建立時間')
       table.datetime('updatetime').notNullable().comment('更新時間')
       table.string('userName', 20).notNullable().comment('使用者名稱')
@@ -14,8 +11,11 @@ exports.up = function (knex) {
       table.tinyint('adminPermission').comment('管理者權限')
     })
     .createTable('product', (table) => {
-      table.primary('productId')
-      table.increments('productId').notNullable().comment('Primary Key')
+      table
+        .increments('productId')
+        .notNullable()
+        .primary()
+        .comment('Primary Key')
       table.datetime('createTime').notNullable().comment('建立時間')
       table.datetime('updatetime').notNullable().comment('更新時間')
       table.string('productName', 20).notNullable().comment('商品名稱')
@@ -42,7 +42,7 @@ exports.up = function (knex) {
       table.primary(['userId', 'productId'])
     })
     .createTable('order', (table) => {
-      table.primary('id')
+      table.increments('id').notNullable().primary().comment('Primary Key')
       table
         .foreign('userId')
         .references('users.userId')
@@ -59,11 +59,7 @@ exports.up = function (knex) {
     })
 }
 
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.down = function (knex) {
+export async function down(knex: Knex): Promise<void> {
   return knex.schema
     .dropTable('users')
     .dropTable('product')
