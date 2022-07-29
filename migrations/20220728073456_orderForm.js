@@ -5,8 +5,7 @@
 exports.up = function (knex) {
   return knex.schema
     .createTable('users', (table) => {
-      table.primary('userId')
-      table.increments('userId').notNullable().comment('Primary Key')
+      table.increments('userId').notNullable().primary().comment('Primary Key')
       table.datetime('createTime').notNullable().comment('建立時間')
       table.datetime('updatetime').notNullable().comment('更新時間')
       table.string('userName', 20).notNullable().comment('使用者名稱')
@@ -14,8 +13,11 @@ exports.up = function (knex) {
       table.tinyint('adminPermission').comment('管理者權限')
     })
     .createTable('product', (table) => {
-      table.primary('productId')
-      table.increments('productId').notNullable().comment('Primary Key')
+      table
+        .increments('productId')
+        .notNullable()
+        .primary()
+        .comment('Primary Key')
       table.datetime('createTime').notNullable().comment('建立時間')
       table.datetime('updatetime').notNullable().comment('更新時間')
       table.string('productName', 20).notNullable().comment('商品名稱')
@@ -26,13 +28,15 @@ exports.up = function (knex) {
     })
     .createTable('cart', (table) => {
       table
-        .foreign('userId')
-        .references('users.userId')
+        .integer('userId')
+        .references('userId')
+        .inTable('users')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table
-        .foreign('productId')
-        .references('product.productId')
+        .integer('productId')
+        .references('usproductIderId')
+        .inTable('product')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table.datetime('createTime').notNullable().comment('建立時間')
@@ -42,7 +46,7 @@ exports.up = function (knex) {
       table.primary(['userId', 'productId'])
     })
     .createTable('order', (table) => {
-      table.primary('id')
+      table.increments('id').notNullable().primary().comment('Primary Key')
       table
         .foreign('userId')
         .references('users.userId')
