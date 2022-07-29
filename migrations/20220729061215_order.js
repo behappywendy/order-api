@@ -5,7 +5,7 @@
 exports.up = async (knex) => {
   const result = await knex.schema.createTable('order', (table) => {
     table.increments('id').notNullable().primary().comment('Primary Key')
-    table.integer('userId').notNullable()
+    table.integer('userId').unsigned().notNullable()
     table
       .foreign('userId')
       .references('users.userId')
