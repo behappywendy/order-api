@@ -1,0 +1,38 @@
+version: '2'
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb_test
+    volumes:
+      - ./:/usr/src/app
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "test"
+    networks:
+      - docker-service
+    command: bash -c "cd /usr/src/app && apt update && apt install npm -y && npm install -g knex && knex migrate:up"
+    depends_on:
+      - node
+
+  node:
+    image: node:lts
+    environment:
+      - DEBUG=app:*
+    container_name: node_test
+    volumes:
+      - ./:/usr/src/app
+    expose:
+      - "3001"
+    ports:
+      - "3001:3001"
+    init: true
+    command: bash -c "cd /usr/src/app && npm start"
+    networks:
+      - docker-service
+    
+networks:
+  docker-service:
+    driver: bridge
