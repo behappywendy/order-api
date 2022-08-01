@@ -1,38 +1,42 @@
-version: '2'
+version: '3.9'
 services:
   mariadb:
     image: mariadb:latest
-    container_name: mariadb_test
-    volumes:
-      - ./:/usr/src/app
-    expose:
-      - "3306"
+    container_name: mariadb
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: "test"
+      - MARIADB_ROOT_HOST=localhost
+      - MARIADB_ROOT_PASSWORD=hello_root
+      - MARIADB_DATABASE=order_form
     networks:
-      - docker-service
-    command: bash -c "cd /usr/src/app && apt update && apt install npm -y && npm install -g knex && knex migrate:up"
-    depends_on:
-      - node
+      - order-network
 
-  node:
-    image: node:lts
-    environment:
-      - DEBUG=app:*
-    container_name: node_test
+  api:
+    build: ./
+    container_name: node_api
     volumes:
-      - ./:/usr/src/app
-    expose:
-      - "3001"
+      - ./:/order-api
     ports:
       - "3001:3001"
-    init: true
-    command: bash -c "cd /usr/src/app && npm start"
+    environment:
+      - PORT=3001
+    command: bash -c "cd /order-api && yarn start"
     networks:
-      - docker-service
+      - order-network
+    depends_on:
+      - mariadb
+  
+  web:
+    image: node:14.20.0
+    container_name: node_web
+    volumes:
+      - ../order:/order
+    ports:
+      - "8080:8080"
+    command: bash -c "cd /order && npm run serve"
+    networks:
+      - order-network
     
 networks:
-  docker-service:
-    driver: bridge
+  order-network:
