@@ -8,7 +8,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const app: Express = express()
-const port = process.env.PORT
+// const port = process.env.PORT
 
 app.get('/', cors(), (req: Request, res: Response) => {
   res.send('123')
@@ -23,6 +23,6 @@ app.use('/user', userRouter)
 app.use('/cart', cartRouter)
 app.use('/order', orderRouter)
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`)
+app.listen(3001, () => {
+  console.log(`Server is running at http://localhost:3001`)
 })
