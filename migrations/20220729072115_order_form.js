@@ -3,9 +3,8 @@
  * @returns { Promise<void> }
  */
 exports.up = async (knex) => {
-  const result = await knex
-    .raw('CREATE DATABASE order_form')
-    .schema.createTable('users', (table) => {
+  const result = await knex.schema
+    .createTable('users', (table) => {
       table.increments('userId').notNullable().primary().comment('Primary Key')
       table.datetime('createTime').notNullable().comment('建立時間')
       table.datetime('updatetime').notNullable().comment('更新時間')
