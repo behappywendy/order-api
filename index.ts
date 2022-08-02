@@ -8,14 +8,16 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const app: Express = express()
-const port = process.env.PORT
+// const port = process.env.PORT
+const port = 3001
 
 app.get('/', cors(), (req: Request, res: Response) => {
   res.send('123')
 })
 app.use(
   cors({
-    origin: 'http://localhost:8080',
+    // origin: `http://localhost:8080`,
+    origin: '*',
   })
 )
 app.use('/product', productRouter)

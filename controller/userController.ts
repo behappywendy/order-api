@@ -33,10 +33,12 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const userLogin = (req: Request, res: Response) => {
   const { userName, userPassword } = req.body
+  // res.send({ userName, userPassword })
   knex('users')
     .select('*')
     .where('userName', userName)
     .then((result: Users[]) => {
+      // res.send(result)
       if (!result.length)
         res.status(401).json({
           message: '使用者名稱或密碼錯誤',
@@ -50,6 +52,7 @@ export const userLogin = (req: Request, res: Response) => {
             message: '使用者名稱或密碼錯誤',
           })
         else {
+          // res.send(result)
           const token = signJwt({
             id: result[0].userId,
             userName: result[0].userName,

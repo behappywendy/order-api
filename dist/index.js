@@ -12,12 +12,14 @@ const orderRouter_1 = __importDefault(require("./router/orderRouter"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const port = process.env.PORT;
+// const port = process.env.PORT
+const port = 3001;
 app.get('/', (0, cors_1.default)(), (req, res) => {
     res.send('123');
 });
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:8080',
+    // origin: `http://localhost:8080`,
+    origin: '*',
 }));
 app.use('/product', productRouter_1.default);
 app.use('/user', userRouter_1.default);

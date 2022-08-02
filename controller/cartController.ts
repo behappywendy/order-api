@@ -47,7 +47,6 @@ export const readCart = (req: Request, res: Response) => {
   const userId = getUserFromJwt(token!)
 
   knex('cart')
-    .join('product', 'cart.productId', '=', 'product.productId')
     .select(
       'product.productId',
       'product.productName',
@@ -55,6 +54,7 @@ export const readCart = (req: Request, res: Response) => {
       'cart.amount',
       'cart.totalPrice'
     )
+    .join('product', 'cart.productId', '=', 'product.productId')
     .where('userId', userId)
     .then((result: any) => {
       res.send(result)
