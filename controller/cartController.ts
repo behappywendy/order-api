@@ -9,36 +9,38 @@ export const createCart = async (req: Request, res: Response) => {
   const userId = getUserFromJwt(token!)
   const nowTime = moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss')
 
-  const cartExist = await knex('cart')
-    .select()
-    .where('userId', userId)
-    .andWhere('productId', productId)
-
-  if (cartExist.length) {
-    knex('cart')
+  if (userId) {
+    const cartExist = await knex('cart')
+      .select()
       .where('userId', userId)
       .andWhere('productId', productId)
-      .update({
-        updateTime: nowTime,
-        amount,
-        totalPrice,
-      })
-      .then((result: any) => {
-        res.status(!!result ? 200 : 404).json({ success: !!result })
-      })
-  } else {
-    knex('cart')
-      .insert({
-        createTime: nowTime,
-        updateTime: nowTime,
-        userId,
-        productId,
-        amount,
-        totalPrice,
-      })
-      .then((result: any) => {
-        res.send(result)
-      })
+
+    if (cartExist.length) {
+      knex('cart')
+        .where('userId', userId)
+        .andWhere('productId', productId)
+        .update({
+          updateTime: nowTime,
+          amount,
+          totalPrice,
+        })
+        .then((result: any) => {
+          res.status(!!result ? 200 : 404).json({ success: !!result })
+        })
+    } else {
+      knex('cart')
+        .insert({
+          createTime: nowTime,
+          updateTime: nowTime,
+          userId,
+          productId,
+          amount,
+          totalPrice,
+        })
+        .then((result: any) => {
+          res.send(result)
+        })
+    }
   }
 }
 
@@ -46,19 +48,21 @@ export const readCart = (req: Request, res: Response) => {
   const token = req.headers.authorization?.split(' ')[1]
   const userId = getUserFromJwt(token!)
 
-  knex('cart')
-    .select(
-      'product.productId',
-      'product.productName',
-      'product.productPrice',
-      'cart.amount',
-      'cart.totalPrice'
-    )
-    .join('product', 'cart.productId', '=', 'product.productId')
-    .where('userId', userId)
-    .then((result: any) => {
-      res.send(result)
-    })
+  if (userId) {
+    knex('cart')
+      .select(
+        'product.productId',
+        'product.productName',
+        'product.productPrice',
+        'cart.amount',
+        'cart.totalPrice'
+      )
+      .join('product', 'cart.productId', '=', 'product.productId')
+      .where('userId', userId)
+      .then((result: any) => {
+        res.send(result)
+      })
+  }
 }
 
 export const updateCart = (req: Request, res: Response) => {
@@ -68,18 +72,20 @@ export const updateCart = (req: Request, res: Response) => {
   const nowTime = moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss')
   const { amount, totalPrice } = req.body
 
-  knex('cart')
-    .where('userId', userId)
-    .andWhere('productId', id)
-    .update({
-      updateTime: nowTime,
-      amount,
-      totalPrice,
-    })
-    .then((result: any) => {
-      res.status(!!result ? 200 : 404).json({ success: !!result })
-    })
-    .catch((error: any) => res.status(500).json(error))
+  if (userId) {
+    knex('cart')
+      .where('userId', userId)
+      .andWhere('productId', id)
+      .update({
+        updateTime: nowTime,
+        amount,
+        totalPrice,
+      })
+      .then((result: any) => {
+        res.status(!!result ? 200 : 404).json({ success: !!result })
+      })
+      .catch((error: any) => res.status(500).json(error))
+  }
 }
 
 export const deleteCart = (req: Request, res: Response) => {
@@ -87,22 +93,24 @@ export const deleteCart = (req: Request, res: Response) => {
   const token = req.headers.authorization?.split(' ')[1]
   const userId = getUserFromJwt(token!)
 
-  if (parseInt(id) === 0) {
-    knex('cart')
-      .where('userId', userId)
-      .del()
-      .then((result: any) => {
-        res.status(!!result ? 200 : 404).json({ success: !!result })
-      })
-      .catch((error: any) => res.status(500).json(error))
-  } else {
-    knex('cart')
-      .where('userId', userId)
-      .andWhere('productId', id)
-      .del()
-      .then((result: any) => {
-        res.status(!!result ? 200 : 404).json({ success: !!result })
-      })
-      .catch((error: any) => res.status(500).json(error))
+  if (userId) {
+    if (parseInt(id) === 0) {
+      knex('cart')
+        .where('userId', userId)
+        .del()
+        .then((result: any) => {
+          res.status(!!result ? 200 : 404).json({ success: !!result })
+        })
+        .catch((error: any) => res.status(500).json(error))
+    } else {
+      knex('cart')
+        .where('userId', userId)
+        .andWhere('productId', id)
+        .del()
+        .then((result: any) => {
+          res.status(!!result ? 200 : 404).json({ success: !!result })
+        })
+        .catch((error: any) => res.status(500).json(error))
+    }
   }
 }
