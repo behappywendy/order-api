@@ -125,8 +125,3 @@ export const deleteUser = async (req: Request, res: Response) => {
     )
     .catch((error: any) => res.status(500).json(error))
 }
-
-export const verifyUser = (req: Request, res: Response) => {
-  // const { token } = req.body
-  res.send(req.headers.authorization?.split(' '))
-}

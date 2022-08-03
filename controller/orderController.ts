@@ -36,19 +36,6 @@ type GetOrder = {
   createTime: string
 }
 
-type Content = {
-  productId: number
-  productName: string
-  productPrice: number
-  amount: number
-}
-
-type Data = {
-  orderId: string
-  createTime: string
-  content: Content[]
-}
-
 export const readOrder = async (req: Request, res: Response) => {
   const token = req.headers.authorization?.split(' ')[1]
   const userId = getUserFromJwt(token!)
@@ -71,13 +58,13 @@ export const readOrder = async (req: Request, res: Response) => {
         )
       })
 
-      const test = new Map()
+      const map = new Map()
       for (let i = 0; i < result.length; i++) {
         const element = result[i]
-        const isSame = test.has(element.createTime)
+        const isSame = map.has(element.createTime)
         if (isSame) {
-          test.set(result[i].createTime, [
-            ...test.get(result[i].createTime),
+          map.set(result[i].createTime, [
+            ...map.get(result[i].createTime),
             {
               createTime: result[i].createTime,
               productId: result[i].productId,
@@ -87,7 +74,7 @@ export const readOrder = async (req: Request, res: Response) => {
             },
           ])
         } else {
-          test.set(result[i].createTime, [
+          map.set(result[i].createTime, [
             {
               createTime: result[i].createTime,
               productId: result[i].productId,
@@ -98,6 +85,6 @@ export const readOrder = async (req: Request, res: Response) => {
           ])
         }
       }
-      res.send(Object.fromEntries(test))
+      res.send(Object.fromEntries(map))
     })
 }

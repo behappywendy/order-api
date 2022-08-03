@@ -6,7 +6,6 @@ import {
   readUsers,
   updateUser,
   deleteUser,
-  verifyUser,
 } from '../controller/userController'
 const router: Router = express.Router()
 
@@ -20,7 +19,5 @@ router.get('/', readUsers)
 router.put('/:id', express.json(), updateUser)
 
 router.delete('/:id', deleteUser)
-
-router.post('/verify', express.json(), verifyUser)
 
 export default router
