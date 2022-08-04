@@ -18,8 +18,7 @@ app.get('/', (0, cors_1.default)(), (req, res) => {
     res.send('123');
 });
 app.use((0, cors_1.default)({
-    // origin: `http://localhost:8080`,
-    origin: '*',
+    origin: `http://localhost:8080`,
 }));
 app.use('/product', productRouter_1.default);
 app.use('/user', userRouter_1.default);
