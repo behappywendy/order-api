@@ -10,8 +10,12 @@ export const createUser = async (req: Request, res: Response) => {
   const nowTime = moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss')
   const cryptPassword = SHA256(userPassword).toString()
 
-  const userExist = await knex('users').select().where('userName', userName)
+  if (!userName || !userPassword || !adminPermission)
+    res.status(404).json({
+      message: '缺少必要的資料',
+    })
 
+  const userExist = await knex('users').select().where('userName', userName)
   if (userExist.length)
     res.status(401).json({
       message: '使用者名稱已存在',
@@ -26,8 +30,14 @@ export const createUser = async (req: Request, res: Response) => {
         adminPermission,
       })
       .then((result: any) => {
-        res.send(result)
+        const userId = result[0]
+        res.send({
+          userId,
+          userName,
+          adminPermission,
+        })
       })
+      .catch((error: any) => res.status(500).json(error))
   }
 }
 
@@ -77,8 +87,13 @@ export const readUser = (req: Request, res: Response) => {
       result[0].updateTime = moment(result[0].updateTime).format(
         'YYYY-MM-DD HH:mm:ss'
       )
-      res.send(result)
+      res.send(result[0])
     })
+    .catch(() =>
+      res.status(500).json({
+        message: '查無此人',
+      })
+    )
 }
 
 export const readUsers = (req: Request, res: Response) => {
@@ -95,6 +110,7 @@ export const readUsers = (req: Request, res: Response) => {
       })
       res.send(result)
     })
+    .catch((error: any) => res.status(500).json(error))
 }
 
 export const updateUser = (req: Request, res: Response) => {
