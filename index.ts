@@ -16,8 +16,7 @@ app.get('/', cors(), (req: Request, res: Response) => {
 })
 app.use(
   cors({
-    // origin: `http://localhost:8080`,
-    origin: '*',
+    origin: `http://localhost:8080`,
   })
 )
 app.use('/product', productRouter)
