@@ -10,7 +10,7 @@ dotenv.config()
 const app: Express = express()
 const port = process.env.PORT
 
-app.get('/', cors(), (req: Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
   res.send('123')
 })
 app.use(
