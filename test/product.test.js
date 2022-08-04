@@ -20,23 +20,31 @@ describe('Product', () => {
       .expect(200)
       .end((err, res) => {
         if (err) done(err)
+        expect(res.body).to.be.an('object')
         expect(res.body).to.have.property('productId')
         expect(res.body.productId).to.be.a('number')
-        expect(res.body).to.have.property('productName')
+        expect(res.body).to.have.property(
+          'productName',
+          productData.productName
+        )
         expect(res.body.productName).to.be.a('string')
-        expect(res.body.productName).to.equal(productData.productName)
-        expect(res.body).to.have.property('productPrice')
+        expect(res.body).to.have.property(
+          'productPrice',
+          productData.productPrice
+        )
         expect(res.body.productPrice).to.be.a('number')
-        expect(res.body.productPrice).to.equal(productData.productPrice)
-        expect(res.body).to.have.property('productSales')
+        expect(res.body).to.have.property(
+          'productSales',
+          productData.productSales
+        )
         expect(res.body.productSales).to.be.a('number')
-        expect(res.body.productSales).to.equal(productData.productSales)
-        expect(res.body).to.have.property('productStock')
+        expect(res.body).to.have.property(
+          'productStock',
+          productData.productStock
+        )
         expect(res.body.productStock).to.be.a('number')
-        expect(res.body.productStock).to.equal(productData.productStock)
-        expect(res.body).to.have.property('note')
+        expect(res.body).to.have.property('note', productData.note)
         expect(res.body.note).to.be.a('string')
-        expect(res.body.note).to.equal(productData.note)
         productCreated = res.body.productId
         done()
       })
@@ -54,9 +62,9 @@ describe('Product', () => {
       .expect(404)
       .end((err, res) => {
         if (err) done(err)
-        expect(res.body).to.have.property('message')
+        expect(res.body).to.be.an('object')
+        expect(res.body).to.have.property('message', '未輸入商品名稱')
         expect(res.body.message).to.be.a('string')
-        expect(res.body.message).to.equal('未輸入商品名稱')
         done()
       })
   })
@@ -67,21 +75,34 @@ describe('Product', () => {
       .expect(200)
       .end((err, res) => {
         if (err) done(err)
-        expect(res.body).to.have.property('productId')
+        expect(res.body).to.be.an('object')
+        expect(res.body).to.have.property('productId', productCreated)
         expect(res.body.productId).to.be.a('number')
         expect(res.body).to.have.property('createTime')
         expect(res.body.createTime).to.be.a('string')
         expect(res.body).to.have.property('updateTime')
         expect(res.body.updateTime).to.be.a('string')
-        expect(res.body).to.have.property('productName')
+        expect(res.body).to.have.property(
+          'productName',
+          productData.productName
+        )
         expect(res.body.productName).to.be.a('string')
-        expect(res.body).to.have.property('productPrice')
+        expect(res.body).to.have.property(
+          'productPrice',
+          productData.productPrice
+        )
         expect(res.body.productPrice).to.be.a('number')
-        expect(res.body).to.have.property('productSales')
+        expect(res.body).to.have.property(
+          'productSales',
+          productData.productSales
+        )
         expect(res.body.productSales).to.be.a('number')
-        expect(res.body).to.have.property('productStock')
+        expect(res.body).to.have.property(
+          'productStock',
+          productData.productStock
+        )
         expect(res.body.productStock).to.be.a('number')
-        expect(res.body).to.have.property('note')
+        expect(res.body).to.have.property('note', productData.note)
         expect(res.body.note).to.be.a('string')
         done()
       })
@@ -93,9 +114,9 @@ describe('Product', () => {
       .expect(500)
       .end((err, res) => {
         if (err) done(err)
-        expect(res.body).to.have.property('message')
+        expect(res.body).to.be.an('object')
+        expect(res.body).to.have.property('message', '無此商品')
         expect(res.body.message).to.be.a('string')
-        expect(res.body.message).to.equal('無此商品')
         done()
       })
   })
@@ -106,6 +127,8 @@ describe('Product', () => {
       .expect(200)
       .end((err, res) => {
         if (err) done(err)
+        expect(res.body).to.be.an('array')
+        expect(res.body[0]).to.be.an('object')
         expect(res.body[0]).to.have.property('productId')
         expect(res.body[0].productId).to.be.a('number')
         expect(res.body[0]).to.have.property('createTime')
@@ -126,7 +149,7 @@ describe('Product', () => {
       })
   })
 
-  it('Update Product: should return success message', (done) => {
+  it('Update Product: should return success true message', (done) => {
     api
       .put(`/product/${productCreated}`)
       .send({
@@ -135,13 +158,15 @@ describe('Product', () => {
       .expect(200)
       .end((err, res) => {
         if (err) done(err)
+        expect(res.body).to.be.an('object')
         expect(res.body).to.have.property('success')
         expect(res.body.success).to.be.a('boolean')
+        expect(res.body.success).to.be.true
         done()
       })
   })
 
-  it('Update Product Failed: should return success message', (done) => {
+  it('Update Product Failed: should return success false message', (done) => {
     api
       .put('/product/2')
       .send({
@@ -150,32 +175,38 @@ describe('Product', () => {
       .expect(404)
       .end((err, res) => {
         if (err) done(err)
+        expect(res.body).to.be.an('object')
         expect(res.body).to.have.property('success')
         expect(res.body.success).to.be.a('boolean')
+        expect(res.body.success).to.be.false
         done()
       })
   })
 
-  it('Delete Product: should return success message', (done) => {
+  it('Delete Product: should return success true message', (done) => {
     api
       .delete(`/product/${productCreated}`)
       .expect(200)
       .end((err, res) => {
         if (err) done(err)
+        expect(res.body).to.be.an('object')
         expect(res.body).to.have.property('success')
         expect(res.body.success).to.be.a('boolean')
+        expect(res.body.success).to.be.true
         done()
       })
   })
 
-  it('Delete Product Failed: should return success message', (done) => {
+  it('Delete Product Failed: should return success false message', (done) => {
     api
       .delete('/product/2')
       .expect(404)
       .end((err, res) => {
         if (err) done(err)
+        expect(res.body).to.be.an('object')
         expect(res.body).to.have.property('success')
         expect(res.body.success).to.be.a('boolean')
+        expect(res.body.success).to.be.false
         done()
       })
   })
