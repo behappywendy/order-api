@@ -29,7 +29,6 @@ export const createProduct = async (req: Request, res: Response) => {
   const { productName, productPrice, productSales, productStock, note } =
     req.body;
   const nowTime = moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss');
-
   const result = await knex('product').insert({
     createTime: nowTime,
     updateTime: nowTime,
@@ -39,7 +38,7 @@ export const createProduct = async (req: Request, res: Response) => {
     productStock,
     note,
   });
-  await loadProduct(result);
+  await loadProduct(true);
   res.send(result);
 };
 
