@@ -30,23 +30,17 @@ export const createProduct = async (req: Request, res: Response) => {
     req.body;
   const nowTime = moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss');
 
-  if (!productName)
-    res.status(404).json({
-      message: '未輸入商品名稱',
-    });
-  else {
-    const result = await knex('product').insert({
-      createTime: nowTime,
-      updateTime: nowTime,
-      productName,
-      productPrice,
-      productSales,
-      productStock,
-      note,
-    });
-    await loadProduct(result);
-    res.send(result);
-  }
+  const result = await knex('product').insert({
+    createTime: nowTime,
+    updateTime: nowTime,
+    productName,
+    productPrice,
+    productSales,
+    productStock,
+    note,
+  });
+  await loadProduct(result);
+  res.send(result);
 };
 
 export const readProduct = (req: Request, res: Response) => {
