@@ -54,29 +54,13 @@ export const readProduct = (req: Request, res: Response) => {
       result[0].updateTime = moment(result[0].updateTime).format(
         'YYYY-MM-DD HH:mm:ss'
       );
-      res.send(result[0]);
-    })
-    .catch((error: any) =>
-      res.status(500).json({
-        message: '無此商品',
-      })
-    );
-};
-
-export const readProducts = (req: Request, res: Response) => {
-  knex('product')
-    .select('*')
-    .then((result: Product[]) => {
-      result.forEach((element) => {
-        element.createTime = moment(element.createTime).format(
-          'YYYY-MM-DD HH:mm:ss'
-        );
-        element.updateTime = moment(element.updateTime).format(
-          'YYYY-MM-DD HH:mm:ss'
-        );
-      });
       res.send(result);
     });
+};
+
+export const readProducts = async (req: Request, res: Response) => {
+  const data = await loadProduct(false);
+  res.send(data);
 };
 
 export const updateProduct = (req: Request, res: Response) => {
@@ -98,6 +82,7 @@ export const updateProduct = (req: Request, res: Response) => {
       res.status(!!result ? 200 : 404).json({ success: !!result })
     )
     .catch((error: any) => res.status(500).json(error));
+  loadProduct(true);
 };
 
 export const deleteProduct = async (req: Request, res: Response) => {
@@ -109,4 +94,5 @@ export const deleteProduct = async (req: Request, res: Response) => {
       res.status(!!result ? 200 : 404).json({ success: !!result })
     )
     .catch((error: any) => res.status(500).json(error));
+  loadProduct(true);
 };
