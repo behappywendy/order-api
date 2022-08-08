@@ -1,4 +1,4 @@
-import express, { Router } from 'express'
+import express, { Router } from 'express';
 import {
   createUser,
   userLogin,
@@ -6,18 +6,18 @@ import {
   readUsers,
   updateUser,
   deleteUser,
-} from '../controller/userController'
-const router: Router = express.Router()
+} from '../controller/userController';
+const router: Router = express.Router();
 
-router.post('/', express.json(), createUser)
+router.post('/', express.json(), createUser);
 
-router.post('/login', express.json(), userLogin)
+router.post('/login', express.json(), userLogin);
 
-router.get('/:id', readUser)
-router.get('/', readUsers)
+router.get('/:id', readUser);
+router.get('/', readUsers);
 
-router.put('/:id', express.json(), updateUser)
+router.put('/:id', express.json(), updateUser);
 
-router.delete('/:id', deleteUser)
+router.delete('/:id', deleteUser);
 
-export default router
+export default router;

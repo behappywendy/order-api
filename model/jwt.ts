@@ -1,26 +1,25 @@
-import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
-dotenv.config()
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const SECRET = process.env.SECRET
-// const SECERT = 'Hello_Order_Form'
+const SECRET = process.env.SECRET;
 
 declare module 'jsonwebtoken' {
   export interface UserJwtPayload extends jwt.JwtPayload {
-    id: number
+    id: number;
   }
 }
 
 export const getUserFromJwt = (token: string): number | undefined => {
   try {
-    const { id } = <jwt.UserJwtPayload>jwt.verify(token, process.env.SECRET!)
-    return id
+    const { id } = <jwt.UserJwtPayload>jwt.verify(token, process.env.SECRET!);
+    return id;
   } catch (error) {
-    return undefined
+    return undefined;
   }
-}
+};
 
 export const signJwt = (payload: any) => {
-  const token = jwt.sign(payload, process.env.SECRET!, { expiresIn: '1 day' })
-  return token
-}
+  const token = jwt.sign(payload, process.env.SECRET!, { expiresIn: '1 day' });
+  return token;
+};

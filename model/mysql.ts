@@ -8,41 +8,41 @@ export const knex = require('knex')({
     database: 'order_form',
   },
   pool: { min: 0, max: 7 },
-})
+});
 
 declare module 'knex/types/tables' {
   interface Product {
-    productId: number
-    createTime: string
-    updateTime: string
-    productName: string
-    productPrice: number
-    productSales: number
-    productStock: number
-    note: string
+    productId: number;
+    createTime: string;
+    updateTime: string;
+    productName: string;
+    productPrice: number;
+    productSales: number;
+    productStock: number;
+    note: string;
   }
 
   interface Users {
-    userId: number
-    createTime: string
-    updateTime: string
-    userName: string
-    userPassword: string
-    adminPermission: number
+    userId: number;
+    createTime: string;
+    updateTime: string;
+    userName: string;
+    userPassword: string;
+    adminPermission: number;
   }
 
   interface Cart {
-    userId: number
-    productId: number
-    createTime: string
-    updateTime: string
-    amount: number
-    totalPrice: number
+    userId: number;
+    productId: number;
+    createTime: string;
+    updateTime: string;
+    amount: number;
+    totalPrice: number;
   }
 
   interface Tables {
-    product: Product
-    users: Users
-    cart: Cart
+    product: Product;
+    users: Users;
+    cart: Cart;
   }
 }

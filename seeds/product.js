@@ -4,7 +4,7 @@
  */
 exports.seed = async function (knex) {
   // Deletes ALL existing entries
-  await knex('product').del()
+  await knex('product').del();
   await knex('product').insert([
     {
       productId: 1,
@@ -36,5 +36,5 @@ exports.seed = async function (knex) {
       productStock: 42,
       note: '貝柱',
     },
-  ])
-}
+  ]);
+};

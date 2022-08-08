@@ -4,7 +4,7 @@
  */
 exports.seed = async function (knex) {
   // Deletes ALL existing entries
-  await knex('users').del()
+  await knex('users').del();
   await knex('users').insert([
     {
       userId: 1,
@@ -15,5 +15,5 @@ exports.seed = async function (knex) {
         'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',
       adminPermission: 1,
     },
-  ])
-}
+  ]);
+};

@@ -14,10 +14,10 @@ const loadProduct = async (update: boolean) => {
   const result = await knex('product').select('*');
   result.forEach((element: Product) => {
     element.createTime = moment(element.createTime).format(
-      'YYYY-MM-DD HH:mm:ss'
+      'YYYY-MM-DD HH:mm:ss',
     );
     element.updateTime = moment(element.updateTime).format(
-      'YYYY-MM-DD HH:mm:ss'
+      'YYYY-MM-DD HH:mm:ss',
     );
   });
 
@@ -49,10 +49,10 @@ export const readProduct = (req: Request, res: Response) => {
     .where('productId', id)
     .then((result: Product[]) => {
       result[0].createTime = moment(result[0].createTime).format(
-        'YYYY-MM-DD HH:mm:ss'
+        'YYYY-MM-DD HH:mm:ss',
       );
       result[0].updateTime = moment(result[0].updateTime).format(
-        'YYYY-MM-DD HH:mm:ss'
+        'YYYY-MM-DD HH:mm:ss',
       );
       res.send(result);
     });
@@ -79,7 +79,7 @@ export const updateProduct = (req: Request, res: Response) => {
       note,
     })
     .then((result: any) =>
-      res.status(!!result ? 200 : 404).json({ success: !!result })
+      res.status(!!result ? 200 : 404).json({ success: !!result }),
     )
     .catch((error: any) => res.status(500).json(error));
   loadProduct(true);
@@ -91,7 +91,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
     .where('productId', id)
     .del()
     .then((result: any) =>
-      res.status(!!result ? 200 : 404).json({ success: !!result })
+      res.status(!!result ? 200 : 404).json({ success: !!result }),
     )
     .catch((error: any) => res.status(500).json(error));
   loadProduct(true);

@@ -29,13 +29,13 @@ const loadOrder = async (update: boolean, userId: number) => {
       'product.productName',
       'product.productPrice',
       'order.amount',
-      'order.createTime'
+      'order.createTime',
     )
     .where('userId', userId);
 
   result.forEach((element: GetOrder) => {
     element.createTime = moment(element.createTime).format(
-      'YYYY-MM-DD HH:mm:ss'
+      'YYYY-MM-DD HH:mm:ss',
     );
   });
 
