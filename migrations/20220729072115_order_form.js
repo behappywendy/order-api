@@ -28,9 +28,17 @@ exports.up = async (knex) => {
     })
     .createTable('cart', (table) => {
       table.integer('userId').unsigned().notNullable().comment('使用者ID');
-      table.foreign('userId').references('users.userId');
+      table
+        .foreign('userId')
+        .references('users.userId')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE');
       table.integer('productId').unsigned().notNullable().comment('商品ID');
-      table.foreign('productId').references('product.productId');
+      table
+        .foreign('productId')
+        .references('product.productId')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE');
       table.datetime('createTime').notNullable().comment('建立時間');
       table.datetime('updateTime').notNullable().comment('更新時間');
       table.integer('amount').notNullable().comment('數量');
@@ -40,10 +48,18 @@ exports.up = async (knex) => {
     .createTable('order', (table) => {
       table.increments('id').notNullable().primary().comment('Primary Key');
       table.integer('userId').unsigned().notNullable();
-      table.foreign('userId').references('users.userId');
+      table
+        .foreign('userId')
+        .references('users.userId')
+        .onUpdate('NO ACTION')
+        .onDelete('NO ACTION');
       table.string('orderId', 36).notNullable().comment('訂單編號');
       table.integer('productId').unsigned().notNullable();
-      table.foreign('productId').references('product.productId');
+      table
+        .foreign('productId')
+        .references('product.productId')
+        .onUpdate('NO ACTION')
+        .onDelete('NO ACTION');
       table.integer('amount').notNullable().comment('數量');
       table.datetime('createTime').notNullable().comment('建立時間');
     });
