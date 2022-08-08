@@ -50,7 +50,7 @@ describe('Product', () => {
       });
   });
 
-  it('Create Product: should return product data', (done) => {
+  it('Create Product Failed: should return no product name', (done) => {
     api
       .post('/product')
       .send({

@@ -96,26 +96,41 @@ export const createOrder = async (req: Request, res: Response) => {
   const orderList = req.body;
   const nowTime = moment.tz('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss');
 
-  for await (const { productId, amount } of orderList) {
-    knex('order')
-      .insert({
-        createTime: nowTime,
-        userId,
-        orderId,
-        productId,
-        amount,
-      })
-      .then((result: any) => {
-        console.log(result);
+  if (orderList.length) {
+    if (userId) {
+      for await (const { productId, amount } of orderList) {
+        knex('order')
+          .insert({
+            createTime: nowTime,
+            userId,
+            orderId,
+            productId,
+            amount,
+          })
+          .then((result: any) => {
+            console.log(result);
+          });
+      }
+      loadOrder(true, userId!);
+      res.send({ orderId });
+    } else
+      res.status(401).json({
+        message: '尚未登入',
       });
-  }
-  loadOrder(true, userId!);
-  res.send(orderId);
+  } else
+    res.status(404).json({
+      message: '輸入的資料不是陣列',
+    });
 };
 
 export const readOrder = async (req: Request, res: Response) => {
   const token = req.headers.authorization?.split(' ')[1];
   const userId = getUserFromJwt(token!);
-  const data = await loadOrder(false, userId!);
-  res.send(data);
+  if (userId) {
+    const data = await loadOrder(false, userId!);
+    res.send(data);
+  } else
+    res.status(401).json({
+      message: '尚未登入',
+    });
 };
